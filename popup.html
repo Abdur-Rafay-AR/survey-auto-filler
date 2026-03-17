@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahria Survey Auto Filler</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 340px;
+      background: #f8fafc;
+      color: #1e293b;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid #1d4ed8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .header-text h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+    }
+    .header-text p {
+      font-size: 11px;
+      color: #bfdbfe;
+      margin-top: 1px;
+    }
+
+    /* ── Body ── */
+    .body {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Section ── */
+    .section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    /* ── Select ── */
+    .select-wrapper {
+      position: relative;
+    }
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+      font-size: 12px;
+    }
+    select {
+      width: 100%;
+      padding: 8px 28px 8px 10px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      color: #1e293b;
+      font-size: 13px;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    select:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    /* ── Toggle rows ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    .toggle-row + .toggle-row {
+      border-top: 1px solid #f1f5f9;
+      margin-top: 4px;
+      padding-top: 9px;
+    }
+    .toggle-label {
+      color: #334155;
+      font-size: 13px;
+    }
+    .toggle-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    /* Custom toggle switch */
+    .switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #cbd5e1;
+      border-radius: 20px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 3px;
+      top: 3px;
+      background: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .switch input:checked + .slider { background: #2563eb; }
+    .switch input:checked + .slider::before {
+      transform: translateX(16px);
+      background: #ffffff;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn {
+      padding: 9px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn:active { filter: brightness(0.95); transform: translateY(0); }
+
+    .btn-fill {
+      background: #16a34a;
+      color: #ffffff;
+      border: 1px solid #15803d;
+    }
+    .btn-submit {
+      background: #ea580c;
+      color: #ffffff;
+      border: 1px solid #c2410c;
+    }
+    .btn-auto {
+      background: #2563eb;
+      color: #ffffff;
+      border: 1px solid #1d4ed8;
+      width: 100%;
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    /* ── Status bar ── */
+    .status {
+      min-height: 34px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .status.success { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+    .status.error   { background: #fff7f7; color: #dc2626; border-color: #fecaca; }
+    .status.info    { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 8px 16px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-icon">🎓</div>
+    <div class="header-text">
+      <h1>Survey Auto Filler</h1>
+      <p>Bahria University CMS · v1.2</p>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- Answer selection -->
+    <div class="section">
+      <div class="section-title">Default Answer</div>
+      <div class="select-wrapper">
+        <select id="defaultAnswer">
+          <option value="0">Strongly Agree</option>
+          <option value="1">Agree</option>
+          <option value="2">Uncertain</option>
+          <option value="3">Disagree</option>
+          <option value="4">Strongly Disagree</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="section">
+      <div class="section-title">Options</div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Auto-submit</div>
+          <div class="toggle-desc">Submit immediately after filling</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="autoSubmit">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Fill comments</div>
+          <div class="toggle-desc">Add default text to comment fields</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="fillComments">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="btn-row">
+      <button class="btn btn-fill" id="fillBtn">
+        <span>✔</span> Fill Survey
+      </button>
+      <button class="btn btn-submit" id="submitBtn">
+        <span>↑</span> Submit
+      </button>
+    </div>
+
+    <button class="btn btn-auto" id="autoAllBtn">
+      ⚡ Auto Fill All Surveys
+    </button>
+
+    <!-- Status -->
+    <div class="status" id="status">Ready — open a survey page to begin</div>
+
+  </div>
+
+  <div class="footer">cms.bahria.edu.pk · Quality Assurance</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

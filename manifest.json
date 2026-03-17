@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Bahria Survey Auto Filler",
+  "version": "1.2",
+  "description": "Automatically fills Bahria University CMS quality assurance surveys",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://cms.bahria.edu.pk/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Bahria Survey Auto Filler",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://cms.bahria.edu.pk/Sys/Student/QualityAssurance/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
