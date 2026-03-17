@@ -13,21 +13,11 @@ A Chrome extension to automatically fill Bahria University Quality Assurance Sur
 
 ## Installation
 
-### Method 1: Load Unpacked Extension (Recommended for Testing)
-
 1. Open Chrome and go to `chrome://extensions/`
 2. Enable "Developer mode" (toggle in the top right)
 3. Click "Load unpacked"
 4. Select the `survey-auto-filler` folder
-5. The extension is now installed!
-
-### Method 2: Create Icons First (Optional)
-
-If you want proper icons:
-1. Open `create-icons.html` in Chrome
-2. It will automatically download 3 icon files (icon16.png, icon48.png, icon128.png)
-3. Move these files to the `survey-auto-filler` folder
-4. Then follow Method 1
+5. The extension is now installed
 
 ## Usage
 
@@ -99,7 +89,7 @@ The extension:
 ## Technical Details
 
 - **Manifest Version**: 3
-- **Permissions**: activeTab, storage, scripting
+- **Permissions**: activeTab, storage, tabs
 - **Content Scripts**: Runs on cms.bahria.edu.pk/Sys/Student/QualityAssurance/*
 - **Storage**: Uses Chrome sync storage to save settings
 
@@ -114,7 +104,7 @@ survey-auto-filler/
 ├── icon16.png         # 16x16 icon
 ├── icon48.png         # 48x48 icon
 ├── icon128.png        # 128x128 icon
-├── create-icons.html  # Helper to generate icons
+├── .gitignore         # Git ignore rules
 └── README.md          # This file
 ```
 
